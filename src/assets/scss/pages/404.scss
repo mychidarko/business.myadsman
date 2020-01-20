@@ -1,0 +1,14 @@
+.error-page {
+	height: 99.5vh !important;
+	flex-direction: column !important;
+	
+	.error {
+		font-size: xx-large !important;
+		font-weight: 500;
+		color: #101010;
+	}
+
+	.suggestion {
+		font-size: larger;
+	}
+}

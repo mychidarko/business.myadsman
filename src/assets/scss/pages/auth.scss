@@ -1,0 +1,46 @@
+.auth-page {
+	height: 100vh;
+}
+
+.auth-card {
+	width: 450px;
+	text-align: center !important;
+	padding: 15px !important;
+
+	.logo {
+		width: 50px !important;
+		margin-bottom: 10px !important;
+	}
+
+	form {
+		margin-top: 45px !important;
+		font-size: 16px !important;
+		color: rgb(92, 92, 92);
+
+		input {
+			font-size: 18px;
+			font-weight: lighter;
+			color: #000 !important;
+		}
+
+		.form-error {
+			margin-top: 5px !important;
+		}
+
+		button[type="submit"] {
+			margin-top: 20px !important;
+		}
+	}
+
+	.tips {
+		margin-top: 20px !important;
+		font-weight: 400 !important;
+		font-size: 14px !important;
+	}
+}
+
+@media only screen and (max-width: 449px) {
+	.auth-card {
+		width: 90% !important;
+	}
+}
