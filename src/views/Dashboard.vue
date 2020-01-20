@@ -8,7 +8,7 @@
           <h4>General Ad Analytics</h4>
         </div>
         <div>
-          <GeneralAnalytics/>
+          <GeneralAnalytics />
         </div>
       </vs-card>
     </vs-col>
@@ -18,16 +18,16 @@
           <h4>Ads Interest</h4>
         </div>
         <div>
-          <SalesIncome/>
+          <SalesIncome />
         </div>
       </vs-card>
     </vs-col>
     <vs-col vs-lg="12">
       <vs-card>
         <div slot="header">
-          <h4>Top Selling Products</h4>
+          <h4>Your Top Ads</h4>
         </div>
-        <TopProducts/>
+        <TopAds />
       </vs-card>
     </vs-col>
   </vs-row>
@@ -38,7 +38,7 @@
 <script>
 import GeneralAnalytics from './components/dashboard/GeneralAnalytics.vue';
 import SalesIncome from './components/dashboard/SalesIncome.vue';
-import TopProducts from './components/dashboard/TopProducts.vue';
+import TopAds from './components/dashboard/TopAds.vue';
 import States from './components/dashboard/States.vue';
 // import Blogs from './components/dashboard/Blogs.vue';
 
@@ -47,7 +47,7 @@ export default {
   components: {
     GeneralAnalytics,
     SalesIncome,
-    TopProducts,
+    TopAds,
     States,
     // Blogs
   }
