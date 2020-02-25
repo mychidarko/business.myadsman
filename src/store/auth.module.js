@@ -25,9 +25,10 @@ const actions = {
 	[LOGIN](context, credentials) {
 		const { email } = credentials;
 		const user = {
-			companyTag: "myadsman-llc",
+			companyTag: "adsman",
 			email,
-			company: "MyAdsMAN",
+			position: "C.E.O/Owner",
+			company: "Adsman",
 			token: "ftfr5687yugyftdr65698uihogyfu6t789uoihfy6"
 		}
 			
@@ -67,12 +68,12 @@ const mutations = {
 		state.errors = error;
 	},
 	[SET_AUTH](state, user) {
-		const { companyTag, email, company } = user;
+		const { companyTag, email, company, position } = user;
 		state.hasAuth = true;
 		state.user = user;
 		state.errors = {};
 		JwtService.saveToken(state.user.token);
-		User.save(companyTag, email, company);
+		User.save(companyTag, email, company, position);
 	},
 	[CHECK_AUTH](state, user) {
 		state.hasAuth = true;

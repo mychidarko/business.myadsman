@@ -6,7 +6,7 @@
 import LineChart from './LineChart';
 
 export default {
-	name: "SalesSummary",
+	name: "GeneralAnalytics",
     components: {
         LineChart
     }

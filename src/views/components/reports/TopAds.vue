@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody v-for="ad in topAds" :key="ad.url">
-                <tr>
+                <tr class="bg-white">
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="mr-2"><vs-avatar color="primary" :text="ad.name" /></div>

@@ -1,12 +1,12 @@
 export default [
 	{
-		url: "/",
+		url: "/dashboard",
 		name: "Dashboard",
 		icon: "home"
 	},
 	{
 		url: "/ads/create",
-		name: "Create Ad",
+		name: "My Ads",
 		icon: "add"
 	},
 	{
@@ -15,13 +15,16 @@ export default [
 		icon: "view_quilt"
 	},
 	{
+		url: "div"
+	},
+	{
 		url: "/analytics",
 		name: "Analytics",
 		icon: "bar_chart"
 	},
 	{
-		url: "/smart-data",
-		name: "Smart Data",
+		url: "/reports",
+		name: "Performance Reports",
 		icon: "pie_chart"
 	},
 	{
@@ -38,6 +41,24 @@ export default [
 		url: "/developers",
 		name: "Dev Tools",
 		icon: "code"
+	},
+	{
+		url: "div"
+	},
+	{
+		url: "/payments",
+		name: "Payments",
+		icon: "credit_card"
+	},
+	{
+		url: "/profile",
+		name: "Account",
+		icon: "person"
+	},
+	{
+		url: "/feedback",
+		name: "Send Feedback",
+		icon: "feedback"
 	},
 	// {
 	// 	url: "/alert",

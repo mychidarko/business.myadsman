@@ -5,16 +5,16 @@
                 <tr>
                     <th class="border-top-0">Ad Name</th>
                     <th class="border-top-0">Product</th>
-                    <th class="border-top-0">Support</th>
                     <th class="border-top-0">Reach</th>
                     <th class="border-top-0">Clicks</th>
                     <th class="border-top-0">Shares</th>
+                    <th class="border-top-0">Frequency</th>
                     <th class="border-top-0">type</th>
-                    <th class="border-top-0">timeout</th>
+                    <th class="border-top-0">¢ Spent</th>
                 </tr>
             </thead>
             <tbody v-for="ad in topAds" :key="ad.url">
-                <tr>
+                <tr class="bg-white">
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="mr-2"><vs-avatar color="primary" :text="ad.name" /></div>
@@ -26,12 +26,12 @@
                         </div>
                     </td>
                     <td><a :href="`${ad.productLink}?ref=adsman`" target="_blank">{{ ad.product }}</a></td>
-                    <td>{{ ad.support }}</td>
                     <td>
                         <label class="label label-danger">{{ ad.reach }}</label>
                     </td>
                     <td>{{ ad.clicks }}</td>
                     <td>{{ ad.shares }}</td>
+                    <td>{{ ad.frequency }}</td>
                     <td>
                         <h5 class="m-b-0">{{ ad.type }}</h5>
                     </td>
@@ -46,7 +46,7 @@
 import User from "@/common/storage.user";
 
 export default {
-    name: "TopAds",
+    name: "GeneralReport",
     data() {
         return {
             topAds: [
@@ -55,7 +55,7 @@ export default {
                     name: "Click for CASH",
                     product: "Adsman users",
                     productLink: "https://app.myadsman.com",
-                    support: "support.c4c@myadsman.com",
+                    frequency: 221,
                     reach: 856,
                     clicks: 829,
                     shares: 476,
@@ -67,7 +67,7 @@ export default {
                     name: "Smart Surveys",
                     product: "Adsman business tools",
                     productLink: "https://myadsman.com/business",
-                    support: "support.business@myadsman.com",
+                    frequency: 22,
                     reach: 466,
                     clicks: 460,
                     shares: 378,
