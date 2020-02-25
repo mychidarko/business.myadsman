@@ -1,5 +1,5 @@
-# MyAdsMAN for businesses
-This is the MyadsMAN for businesses app. This is the panel that businesses view when they login. This panel contains all configurations and tools that businesses will need to grow their brand.
+# Adsman for businesses
+This is the Adsman for businesses app. This is the panel that businesses view when they login. This panel contains all configurations and tools that businesses will need to grow their brand.
 
 ## Project Overview
 ### Routes
