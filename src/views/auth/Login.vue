@@ -14,7 +14,9 @@
 					<input type="password" id="password" :class="passwordClass" placeholder="*******" v-model="password">
 					<div class="abs-input-error form-error">{{ passwordError }}</div>
 				</div>
-				<button type="submit" class="abs-btn btn btn-block abs-btn-primary">LOGIN</button>
+				<button type="submit" class="abs-btn btn btn-block abs-btn-primary" :disabled="loading">
+					{{ loading ? "Loading your account..." : "LOGIN" }}
+				</button>
 			</form>
 			<div class="tips">
 				Don't have an account? <router-link to="/auth/register" class="abs-shadow-link">Sign Up</router-link>
@@ -32,6 +34,7 @@ export default {
 	name: "Login",
 	data() {
 		return {
+			loading: false,
 			email: "",
 			emailError: "",
 			emailClass: "form-control abs-input",
@@ -46,17 +49,29 @@ export default {
 			let password = this.password;
 
 			if (this.validate()) {
-				this.$store
-					.dispatch(LOGIN, { email, password })
-					.then(() => this.$router.push({ name: "Dashboard" }));
+				this.loading = true;
+
+				setTimeout(() => {
+					this.$store
+						.dispatch(LOGIN, { email, password })
+						.then(() => {
+							this.loading = false;
+							return this.$router.push({ name: "Dashboard" })
+						});
+				}, 3000);
 			}
 		},
 		validate: function() {
 			let isEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			let isBusinessEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 			if (!isEmail.test(this.email) || this.email.length < 8) {
 				this.emailClass = "form-control abs-input abs-red-border";
 				this.emailError = "Please enter a valid email";
+				return false;
+			} else if (!isBusinessEmail.test(this.email)) {
+				this.emailClass = "form-control abs-input abs-red-border";
+				this.emailError = "Must be a business email";
 				return false;
 			} else {
 				this.emailClass = "form-control abs-input";
