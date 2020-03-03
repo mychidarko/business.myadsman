@@ -33,9 +33,24 @@ const router = new Router({
                     component: () => import('./views/ManageAds')
                 },
                 {
+                    path: '/ads/manage/clickable/:id',
+                    name: 'ManageClickableAd',
+                    component: () => import('./views/ManageClickableAd')
+                },
+                {
+                    path: '/ads/manage/video/:id',
+                    name: 'ManageVideoAd',
+                    component: () => import('./views/ManageVideoAd')
+                },
+                {
                     path: '/analytics',
                     name: 'Analytics',
                     component: () => import('./views/Analytics')
+                },
+                {
+                    path: '/analytics/ad/:type/:id',
+                    name: 'AdAnalytics',
+                    component: () => import('./views/AdAnalytics')
                 },
                 {
                     path: '/reports',

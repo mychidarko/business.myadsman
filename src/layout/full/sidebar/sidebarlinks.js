@@ -6,7 +6,7 @@ export default [
 	},
 	{
 		url: "/ads/create",
-		name: "My Ads",
+		name: "Create Ad",
 		icon: "add"
 	},
 	{

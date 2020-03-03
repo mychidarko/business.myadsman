@@ -1,6 +1,6 @@
 <template>
     <div class="table-responsive">    
-        <table class="table v-middle border">
+        <vs-table data="[]">
             <thead>
                 <tr>
                     <th class="border-top-0">Ad Name</th>
@@ -38,7 +38,7 @@
                     <td>{{ ad.timeout }}</td>
                 </tr>
             </tbody>
-        </table>
+        </vs-table>
     </div>
 </template>
 
@@ -79,3 +79,14 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+thead {
+    margin-bottom: 100px !important;
+}
+
+tr {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+</style>

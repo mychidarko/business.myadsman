@@ -14,20 +14,20 @@
 			<vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="8" vs-sm="6" vs-xs="12" code-toggler>
 				<vs-card class="cardx">
 					<div slot="header">
-						<h4>General Ad Analytics</h4>
+						<h4>Total Ad Interactions</h4>
 					</div>
 					<div>
-						<GeneralAnalytics />
+						<TotalAdInteractions />
 					</div>
 				</vs-card>
 			</vs-col>
 			<vs-col type="flex" vs-justify="center" vs-align="center" vs-sm="6" vs-lg="4" vs-xs="12">
 				<vs-card class="cardx">
 					<div slot="header">
-						<h4>Ads Interest</h4>
+						<h4>Ads Performace Today</h4>
 					</div>
 					<div>
-						<SalesIncome />
+						<AdsPerformaceToday />
 					</div>
 				</vs-card>
 			</vs-col>
@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import GeneralAnalytics from './components/dashboard/GeneralAnalytics.vue';
-import SalesIncome from './components/dashboard/SalesIncome.vue';
+import TotalAdInteractions from './components/dashboard/TotalAdInteractions.vue';
+import AdsPerformaceToday from './components/dashboard/AdsPerformaceToday.vue';
 import TopAds from './components/dashboard/TopAds.vue';
 import Stats from './components/dashboard/Stats.vue';
 // import Blogs from './components/dashboard/Blogs.vue';
@@ -66,8 +66,8 @@ export default {
 		this.isEarning = testData.isEarning;
 	},
 	components: {
-		GeneralAnalytics,
-		SalesIncome,
+		TotalAdInteractions,
+		AdsPerformaceToday,
 		TopAds,
 		Stats,
 		// Blogs

@@ -21,7 +21,7 @@ export default {
 	},
 	data: () => ({
 		topbarColor: "#2e9efe",
-		logotitle: "Adsman Business",
+		logotitle: "Adsman for Business",
 		sidebarLinks: sidebarLinks,
 	})
 }  	
