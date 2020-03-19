@@ -2,21 +2,78 @@
 	<div>
 		<div v-if="loading">Loading Analytics...</div>
 		<div v-else>
-			<vs-card>
-				<div slot="header">Interactions By Location</div>
-				<InteractionsByLocation :data="analytics.location" />
-			</vs-card>
+			<vs-row>
+				<vs-col vs-lg="6" vs-md="6" vs-sm="12" vs-xs="12">
+					<vs-card>
+						<div slot="header">Basic Ad Info</div>
+						<h3>{{ ad.type.toUpperCase() }} Ad #{{ ad.id }} - {{ ad.name }} <span>({{ ad.type }})</span></h3>
+						<vs-divider></vs-divider>
+						<p>
+							{{ ad.description }}<br>
+							<br>
+							Links to <a :href="`${ad.link}?ref=adsman`" target="_blank" rel="adsman">{{ ad.link }}</a><br>
+							<br>
+							<b>Reward: GH¢ {{ ad.reward }}</b>
+							<br>
+							<br>
+						</p>
+						<vs-divider></vs-divider>
+						<router-link :to="`/ads/manage/${ad.type}/${ad.id}`" class="btn btn-primary abs-btn" style="border-radius: 0 !important;">View Full Ad Information</router-link>
+					</vs-card>
+				</vs-col>
+				<vs-col vs-lg="6" vs-md="6" vs-sm="12" vs-xs="12">
+					<vs-card>
+						<div slot="header">Analytics at a glance</div>
+						<div>
+							<div col-lg="6" col-xs="6">
+								<h5>Total impressions</h5>
+								<div>Total number of times your ad has been seen</div>
+								<b>{{ analytics.impressions }}</b>
+							</div>
+							<vs-divider></vs-divider>
+							<div col-lg="6" col-xs="6">
+								<h5>Total Reach</h5>
+								<div><b>Unique</b> number of times your ad has been seen</div>
+								{{ analytics.reach }}
+							</div>
+							<vs-divider></vs-divider>
+							<div col-lg="6" col-xs="6">
+								<h5>Total Interactions</h5>
+								<b>{{ analytics.interactions }}</b>
+							</div>
+							<vs-divider></vs-divider>
+							<div col-lg="6" col-xs="6">
+								<h5>Total Amount Spent GH¢</h5>
+								{{ analytics.spent }}
+							</div>
+						</div>
+					</vs-card>
+				</vs-col>
+				<vs-col vs-xs="12" vs-md="6" vs-sm="6" vs-lg="6">
+					<vs-card>
+						<div slot="header">Analytics By Location</div>
+						<AnalyticsByLocation :data="analytics.locations" />
+					</vs-card>
+				</vs-col>
+				<vs-col vs-xs="12" vs-md="6" vs-sm="6" vs-lg="6">
+					<vs-card>
+						<div slot="header">Interactions Per Gender</div>
+						<AnalyticsByGender :data="analytics.gender" />
+					</vs-card>
+				</vs-col>
+			</vs-row>
 		</div>
 	</div>
 </template>
 
 <script>
-import InteractionsByLocation from './components/Analytics/InteractionsByLocation';
+import AnalyticsByLocation from './components/Analytics/AnalyticsByLocation';
+import AnalyticsByGender from './components/Analytics/AnalyticsByGender';
 
 export default {
 	name: "AdAnalytics",
 	components: {
-		InteractionsByLocation
+		AnalyticsByLocation, AnalyticsByGender
 	},
 	data: function() {
 		return {
@@ -69,6 +126,26 @@ export default {
 						reach: 152, 
 						interactions: 138 
 					},
+				],
+				gender: [
+					{
+						type: "Male",
+						impressions: 860, 
+						reach: 730, 
+						interactions: 695 
+					},
+					{
+						type: "Female",
+						impressions: 860, 
+						reach: 708, 
+						interactions: 658 
+					},
+					{
+						type: "Unknown",
+						impressions: 690, 
+						reach: 662,
+						interactions: 638 
+					}
 				]
 			};
 
