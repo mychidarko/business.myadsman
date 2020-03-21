@@ -106,6 +106,7 @@ export default {
 		setTimeout(() => {
 			let ad = {
 				id,
+				type: "clickable",
 				name: "The future of payments",
 				advertiser: "Portal Network",
 				description: "Link all your wallets together with Portal Online, send and receive cash, pay your bills and keep track of your cash.",

@@ -117,12 +117,12 @@ export default {
 			}
 		];
 		this.reports = [
-			// {
-			// 	read: false,
-			// 	title: "Clicks report",
-			// 	body: "You have received a total of 105 clicks from adsman users",
-			// 	url: "/reports"
-			// }
+			{
+				read: false,
+				title: "Clicks report",
+				body: "You have received a total of 105 clicks from adsman users",
+				url: "/reports"
+			}
 		];
 	},
 	methods: {

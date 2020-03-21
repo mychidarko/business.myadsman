@@ -49,15 +49,21 @@
 						</div>
 					</vs-card>
 				</vs-col>
-				<vs-col vs-xs="12" vs-md="6" vs-sm="6" vs-lg="6">
+				<vs-col vs-xs="12" vs-md="12" vs-sm="12" vs-lg="12">
+					<vs-card>
+						<div slot="header">Analytics Over Time</div>
+						<AnalyticsOverTime :data="analytics.time" />
+					</vs-card>
+				</vs-col>
+				<vs-col vs-xs="12" vs-md="6" vs-sm="12" vs-lg="6">
 					<vs-card>
 						<div slot="header">Analytics By Location</div>
 						<AnalyticsByLocation :data="analytics.locations" />
 					</vs-card>
 				</vs-col>
-				<vs-col vs-xs="12" vs-md="6" vs-sm="6" vs-lg="6">
+				<vs-col vs-xs="12" vs-md="6" vs-sm="12" vs-lg="6">
 					<vs-card>
-						<div slot="header">Interactions Per Gender</div>
+						<div slot="header">Analytics Per Gender</div>
 						<AnalyticsByGender :data="analytics.gender" />
 					</vs-card>
 				</vs-col>
@@ -69,11 +75,12 @@
 <script>
 import AnalyticsByLocation from './components/Analytics/AnalyticsByLocation';
 import AnalyticsByGender from './components/Analytics/AnalyticsByGender';
+import AnalyticsOverTime from './components/Analytics/AnalyticsOverTime';
 
 export default {
 	name: "AdAnalytics",
 	components: {
-		AnalyticsByLocation, AnalyticsByGender
+		AnalyticsByLocation, AnalyticsByGender, AnalyticsOverTime
 	},
 	data: function() {
 		return {
@@ -145,6 +152,50 @@ export default {
 						impressions: 690, 
 						reach: 662,
 						interactions: 638 
+					}
+				],
+				time: [
+					{
+						date: "13th March, 2020",
+						impressions: 720,
+						reach: 590,
+						interactions: 555
+					},
+					{
+						date: "14th March, 2020",
+						impressions: 720, 
+						reach: 563, 
+						interactions: 528 
+					},
+					{
+						date: "15th March, 2020",
+						impressions: 610, 
+						reach: 582,
+						interactions: 558 
+					},
+					{
+						date: "16th March, 2020",
+						impressions: 120,
+						reach: 115,
+						interactions: 100
+					},
+					{
+						date: "17th March, 2020",
+						impressions: 100, 
+						reach: 100, 
+						interactions: 100 
+					},
+					{
+						date: "18th March, 2020",
+						impressions: 50, 
+						reach: 50,
+						interactions: 50 
+					},
+					{
+						date: "19th March, 2020",
+						impressions: 100, 
+						reach: 100, 
+						interactions: 100 
 					}
 				]
 			};

@@ -18,6 +18,29 @@ export default [
 		url: "div"
 	},
 	{
+		url: "/surveys/create",
+		name: "Create Survey",
+		icon: "add"
+	},
+	{
+		url: "/surveys",
+		name: "Mange Surveys",
+		icon: "chat"
+	},
+	// {
+	// 	url: "/earn",
+	// 	name: "Earn",
+	// 	icon: "money"
+	// },
+	// {
+	// 	url: "/developers",
+	// 	name: "Dev Tools",
+	// 	icon: "code"
+	// },
+	{
+		url: "div"
+	},
+	{
 		url: "/analytics",
 		name: "Analytics",
 		icon: "bar_chart"
@@ -26,21 +49,6 @@ export default [
 		url: "/reports",
 		name: "Performance Reports",
 		icon: "pie_chart"
-	},
-	{
-		url: "/surveys",
-		name: "Surveys",
-		icon: "chat"
-	},
-	{
-		url: "/earn",
-		name: "Earn",
-		icon: "money"
-	},
-	{
-		url: "/developers",
-		name: "Dev Tools",
-		icon: "code"
 	},
 	{
 		url: "div"

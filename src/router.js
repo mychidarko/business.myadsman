@@ -43,6 +43,31 @@ const router = new Router({
                     component: () => import('./views/ManageVideoAd')
                 },
                 {
+                    path: '/ads/edit/clickable/:id',
+                    name: 'EditClickableAd',
+                    component: () => import('./views/EditClickableAd')
+                },
+                {
+                    path: '/ads/edit/video/:id',
+                    name: 'EditVideoAd',
+                    component: () => import('./views/EditVideoAd')
+                },
+                {
+                    path: '/products/create',
+                    name: 'CreateProduct',
+                    component: () => import('./views/CreateProduct')
+                },
+                {
+                    path: '/products/manage',
+                    name: 'ManageProducts',
+                    component: () => import('./views/ManageProducts')
+                },
+                {
+                    path: '/products/manage/:id',
+                    name: 'ManageProduct',
+                    component: () => import('./views/ManageProduct')
+                },
+                {
                     path: '/analytics',
                     name: 'Analytics',
                     component: () => import('./views/Analytics')
@@ -67,16 +92,16 @@ const router = new Router({
                     name: 'Surveys',
                     component: () => import('./views/Surveys')
                 },
-                {
-                    path: '/earn',
-                    name: 'Earn',
-                    component: () => import('./views/Earn')
-                },
-                {
-                    path: '/developers',
-                    name: 'DevTools',
-                    component: () => import('./views/DevTools')
-                },
+                // {
+                //     path: '/earn',
+                //     name: 'Earn',
+                //     component: () => import('./views/Earn')
+                // },
+                // {
+                //     path: '/developers',
+                //     name: 'DevTools',
+                //     component: () => import('./views/DevTools')
+                // },
                 {
                     path: '/settings',
                     name: 'Settings',

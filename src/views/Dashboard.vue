@@ -11,24 +11,22 @@
 		</div> -->
 		<Stats />
 		<vs-row vs-justify="center">
-			<vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="8" vs-sm="6" vs-xs="12" code-toggler>
+			<vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="8" vs-sm="12" vs-xs="12" code-toggler>
 				<vs-card class="cardx">
 					<div slot="header">
-						<h4>Total Ad Interactions</h4>
+						<h4>General Ad Analytics</h4>
 					</div>
-					<div>
-						<TotalAdInteractions />
-					</div>
+					<TotalAnalyticsOverTime :data="analytics.time" v-if="!loading" />
+					<div v-else>Loading Analytics Data...</div>
 				</vs-card>
 			</vs-col>
-			<vs-col type="flex" vs-justify="center" vs-align="center" vs-sm="6" vs-lg="4" vs-xs="12">
+			<vs-col type="flex" vs-justify="center" vs-align="center" vs-sm="12" vs-lg="4" vs-xs="12">
 				<vs-card class="cardx">
 					<div slot="header">
 						<h4>Ads Performace Today</h4>
 					</div>
-					<div>
-						<AdsPerformaceToday />
-					</div>
+					<AdsPerformaceToday :data="analytics.today" v-if="!loading" />
+					<div v-else>Loading Analytics Data...</div>
 				</vs-card>
 			</vs-col>
 			<vs-col vs-lg="12">
@@ -45,9 +43,9 @@
 </template>
 
 <script>
-import TotalAdInteractions from './components/dashboard/TotalAdInteractions.vue';
-import AdsPerformaceToday from './components/dashboard/AdsPerformaceToday.vue';
-import TopAds from './components/dashboard/TopAds.vue';
+import TotalAnalyticsOverTime from './components/Analytics/TotalAnalyticsOverTime.vue';
+import AdsPerformaceToday from './components/Analytics/AdsPerformaceToday.vue';
+import TopAds from './components/reports/TopAds.vue';
 import Stats from './components/dashboard/Stats.vue';
 // import Blogs from './components/dashboard/Blogs.vue';
 
@@ -55,18 +53,89 @@ export default {
 	name: 'Dashboard',
 	data() {
 		return {
-			isEarning: false,
-			earnAlertActive: !this.isEarning
+			loading: true,
+			analytics: {}
 		}
 	},
 	mounted() {
-		let testData = {
-			isEarning: false
-		};
-		this.isEarning = testData.isEarning;
+		this.$vs.loading({ text: "Loading User Info..." });
+
+		setTimeout(() => {
+			let analytics = {
+				today: [
+					{
+						ad: "Ad #5",
+						impressions: 52, 
+						reach: 35, 
+						interactions: 22 
+					},
+					{
+						ad: "Ad #6",
+						impressions: 44, 
+						reach: 38,
+						interactions: 32 
+					},
+					{
+						ad: "Ad #7",
+						impressions: 51, 
+						reach: 48, 
+						interactions: 40 
+					}
+				],
+				time: [
+					{
+						ad: "Ad #1",
+						impressions: 720,
+						reach: 590,
+						interactions: 555
+					},
+					{
+						ad: "Ad #2",
+						impressions: 720, 
+						reach: 563, 
+						interactions: 528 
+					},
+					{
+						ad: "Ad #3",
+						impressions: 610, 
+						reach: 582,
+						interactions: 558 
+					},
+					{
+						ad: "Ad #4",
+						impressions: 120,
+						reach: 115,
+						interactions: 100
+					},
+					{
+						ad: "Ad #5",
+						impressions: 100, 
+						reach: 100, 
+						interactions: 100 
+					},
+					{
+						ad: "Ad #6",
+						impressions: 50, 
+						reach: 50,
+						interactions: 50 
+					},
+					{
+						ad: "Ad #7",
+						impressions: 100, 
+						reach: 100, 
+						interactions: 100 
+					}
+				]
+			};
+			
+			this.analytics = analytics;
+			this.loading = false;
+
+			this.$vs.loading.close();
+		}, 3000);
 	},
 	components: {
-		TotalAdInteractions,
+		TotalAnalyticsOverTime,
 		AdsPerformaceToday,
 		TopAds,
 		Stats,
