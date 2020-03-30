@@ -5,11 +5,11 @@
 				Loading Ads...
 			</vs-col>
 		</vs-row>
-		<vs-row vs-justify="center" v-else>
+		<vs-row v-else>
 			<div v-if="ads.length === 0" style="margin: 20px 0px !important;">
 				There are currently no ads at the moment
 			</div>
-			<vs-col v-else type="flex" vs-justify="center" vs-align="center" vs-lg="3" vs-sm="6" vs-xs="12" code-toggler v-for="(ad, index) in ads" :key="index">
+			<vs-col v-else vs-lg="3" vs-sm="6" vs-xs="12" code-toggler v-for="(ad, index) in ads" :key="index">
 				<router-link style="color: black !important;" :to="`/ads/manage/${ad.type}/${ad.id}`">
 					<vs-card class="cardx">
 						<div v-if="ad.type === 'clickable'">

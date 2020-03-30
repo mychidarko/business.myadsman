@@ -2,6 +2,20 @@
 	<div>
 		<section>
 			<div class="section-info">
+				<h4>Pending Ads</h4>
+				<span>Awaiting confirmation from Adsman</span>
+			</div>
+			<AdGroup :loading="loading" :ads="pending" />
+		</section>
+		<section>
+			<div class="section-info">
+				<h4>Drafts</h4>
+				<span>These ads haven't been submitted to Adsman</span>
+			</div>
+			<AdGroup :loading="loading" :ads="drafts" />
+		</section>
+		<section>
+			<div class="section-info">
 				<h4>Clickable Ads</h4>
 				<span>Click to earn</span>
 			</div>
@@ -26,6 +40,8 @@ export default {
 		return {
 			clickableAds: [],
 			videoAds: [],
+			drafts: [],
+			pending: [],
 			loading: true
 		}
 	},
@@ -33,6 +49,15 @@ export default {
 		// api call to get ads
 		this.$vs.loading({ text: "Loading Ads..." })
 		setTimeout(() => {
+			let drafts = [
+				{ id: 1, name: "Portal Online", advertiser: "Portal Network", img: "https://source.unsplash.com/random/200x100", type: "clickable", reward: "0.2" },
+				{ id: 2, name: "For bigger fun", advertiser: "Google Chromecast", video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", type: "video", reward: "0.5" },
+			];
+			let pending = [
+				{ id: 1, name: "Portal Online", advertiser: "Portal Network", img: "https://source.unsplash.com/random/200x100", type: "clickable", reward: "0.2" },
+				{ id: 2, name: "For bigger fun", advertiser: "Google Chromecast", video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", type: "video", reward: "0.5" },
+				{ id: 3, name: "For bigger meltdowns", advertiser: "Google Chromecast", video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4", type: "video", reward: "2" },
+			];
 			let clickableAds = [
 				{ id: 1, name: "Nestle Nido Milkshake", advertiser: "Nestle", img: "https://source.unsplash.com/random/200x100", type: "clickable", reward: "0.2" },
 				{ id: 2, name: "Motorolla Phones", advertiser: "Motorolla", img: "https://source.unsplash.com/random/200x99", type: "clickable", reward: "0.5" },
@@ -48,6 +73,8 @@ export default {
 
 			this.clickableAds = clickableAds;
 			this.videoAds = videoAds;
+			this.drafts = drafts;
+			this.pending = pending;
 
 			this.loading = false;
 			this.$vs.loading.close();
