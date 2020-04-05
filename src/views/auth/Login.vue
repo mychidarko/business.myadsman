@@ -29,6 +29,7 @@
 
 <script>
 import { LOGIN } from "@/store/actions.type";
+import auth from "@/common/api/auth.api";
 
 export default {
 	name: "Login",
@@ -50,15 +51,49 @@ export default {
 
 			if (this.validate()) {
 				this.loading = true;
+				this.$vs.loading({ text: "Loading your account..." });
 
-				setTimeout(() => {
-					this.$store
-						.dispatch(LOGIN, { email, password })
+				let user = auth.$login(email, password);
+				
+				if (user[0] == false) {
+					let errors = String(user[1]).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+
+					this.loading = false;
+					this.$vs.loading.close();
+				} else {
+					if (user[1].error && !user[1].error.auth) {
+						this.emailClass = "form-control abs-input abs-red-border";
+						this.emailError = user[1].error;
+					} else if (user[1].error && user[1].error.auth) {
+						this.emailClass = "form-control abs-input abs-red-border";
+						this.emailError = user[1].error.auth;
+					} else {
+						this.$store
+						.dispatch(LOGIN, user[1])
 						.then(() => {
 							this.loading = false;
 							return this.$router.push({ name: "Dashboard" })
 						});
-				}, 3000);
+					}
+
+					this.loading = false;
+					this.$vs.loading.close();
+				}
 			}
 		},
 		validate: function() {

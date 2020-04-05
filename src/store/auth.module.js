@@ -1,10 +1,8 @@
-// import axios from 'axios';
 import JwtService from "@/common/jwt.service";
 import User from "@/common/storage.user";
 
 import { LOGIN, LOGOUT, REGISTER, CHECK_AUTH, UPDATE_USER } from "./actions.type";
-import { SET_AUTH, PURGE_AUTH, SET_ERROR } from "./mutations.type";
-// import { API_URL } from '@/common/config';
+import { SET_AUTH, PURGE_AUTH, SET_ERROR } from "./mutations.type"
 
 const state = {
   errors: null,
@@ -22,23 +20,13 @@ const getters = {
 };
 
 const actions = {
-	[LOGIN](context, credentials) {
-		const { email } = credentials;
-		const user = {
-			companyTag: "adsman",
-			email,
-			position: "C.E.O/Owner",
-			company: "Adsman",
-			token: "ftfr5687yugyftdr65698uihogyfu6t789uoihfy6"
-		}
-			
+	[LOGIN](context, user) {			
 		context.commit(SET_AUTH, user);
 	},
 	[LOGOUT](context) {
 		context.commit(PURGE_AUTH);
 	},
 	[REGISTER](context, user) {
-		user.token = "ftfr5687yugyftdr65698uihogyfu6t789uoihfy6";
 		context.commit(SET_AUTH, user);
 	},
 	[CHECK_AUTH](context) {
@@ -68,12 +56,11 @@ const mutations = {
 		state.errors = error;
 	},
 	[SET_AUTH](state, user) {
-		const { companyTag, email, company, position } = user;
 		state.hasAuth = true;
 		state.user = user;
 		state.errors = {};
 		JwtService.saveToken(state.user.token);
-		User.save(companyTag, email, company, position);
+		User.save(user);
 	},
 	[CHECK_AUTH](state, user) {
 		state.hasAuth = true;

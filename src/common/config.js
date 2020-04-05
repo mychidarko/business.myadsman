@@ -1,2 +1,3 @@
-export const API_URL = "https://conduit.productionready.io/api";
-export default API_URL;
+export const API_URL = "http://localhost:7000";
+export const USER_STORAGE_KEY = "business.user";
+export const MAINTAINANCE_MODE = false;

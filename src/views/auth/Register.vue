@@ -48,6 +48,7 @@
 
 <script>
 import { REGISTER } from "@/store/actions.type";
+import auth from "@/common/api/auth.api";
 
 export default {
 	name: "Register",
@@ -84,15 +85,63 @@ export default {
 
 			if (this.validate()) {
 				this.loading = true;
+				this.$vs.loading({ text: "Creating your account..." });
 
-				setTimeout(() => {
-					this.$store
-						.dispatch(REGISTER, { email, position, companyTag, company, password })
-						.then(() => {
-							this.loading = false;
-							return this.$router.push({ name: "Dashboard" })
-						});
-				}, 3000);
+				let user = auth.$register(company, companyTag, email, position, password);
+
+				if (user[0] == true) {
+					if (user[1].error && user[1].error.business_name) {
+						this.businessNameClass = "form-control abs-input abs-red-border";
+						this.businessNameError = user[1].error.businessName;
+					}
+
+					if (user[1].error && user[1].error.business_tag) {
+						this.businessTagClass = "form-control abs-input abs-red-border";
+						this.businessTagError = user[1].error.businessTag;
+					}
+
+					if (user[1].error && user[1].error.position) {
+						this.positionClass = "form-control abs-input abs-red-border";
+						this.positionError = user[1].error.position;
+					}
+
+					if (user[1].error && user[1].error.email) {
+						this.emailClass = "form-control abs-input abs-red-border";
+						this.emailError = user[1].error.email;
+					}
+					
+					if (!user[1].error) {
+						this.$store
+							.dispatch(REGISTER, user[1])
+							.then(() => {
+								this.loading = false;
+								return this.$router.push({ name: "Dashboard" })
+							});
+					}
+
+					this.loading = false;
+					this.$vs.loading.close();
+				} else {
+					let errors = String(user[1]).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+
+					this.loading = false;
+					this.$vs.loading.close();
+				}
 			}
 		},
 		validate: function() {
