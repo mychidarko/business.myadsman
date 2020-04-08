@@ -73,19 +73,18 @@ export default {
 								});
 							} else {
 								this.emailClass = "form-control abs-input abs-red-border";
-								this.emailError = res.data.error;
+								this.emailError = res.data.error.employee_email;
 							}
 						} else if (res.data.error && res.data.error.auth) {
-							this.emailClass = "form-control abs-input abs-red-border";
-							this.emailError = res.data.error.auth;
+							this.passwordClass = "form-control abs-input abs-red-border";
+							this.passwordError = res.data.error.auth;
 						} else {
-							console.log(res.data);
-							// this.$store
-							// 	.dispatch(LOGIN, res.data)
-							// 	.then(() => {
-							// 		this.loading = false;
-							// 		return this.$router.push({ name: "Dashboard" })
-							// 	});
+							this.$store
+								.dispatch(LOGIN, res.data)
+								.then(() => {
+									this.loading = false;
+									return this.$router.push({ name: "Dashboard" })
+								});
 						}
 
 						this.loading = false;
