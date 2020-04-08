@@ -277,7 +277,7 @@ router.beforeEach((to, from, next) => {
     const hasAuth = JwtService.getToken();
 
     if (authRequired && !hasAuth) {
-        return next("/auth/login");
+        return next(`/auth/login?from=${from}`);
     } else if (!authRequired && hasAuth) {
         return next("/dashboard");
     }

@@ -28,8 +28,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { API_URL } from '@/common/config';
 import { LOGIN } from "@/store/actions.type";
-import auth from "@/common/api/auth.api";
 
 export default {
 	name: "Login",
@@ -53,47 +54,64 @@ export default {
 				this.loading = true;
 				this.$vs.loading({ text: "Loading your account..." });
 
-				let user = auth.$login(email, password);
-				
-				if (user[0] == false) {
-					let errors = String(user[1]).split(" ");
-					let errs = "";
-
-					for (let index = 0; index < errors.length; index++) {
-						const error = errors[index];
-						if (index > 0) {
-							errs = `${errs} ${error} `;
+				axios({
+					method: "post",
+					url: `${API_URL}/business/auth/login`,
+					headers: { "Content-Type": "application/json" },
+					data: JSON.stringify({
+						email, password
+					})
+				})
+					.then((res) => {
+						if (res.data.error && !res.data.error.auth) {
+							if (res.data.code && res.data.code == 404) {
+								this.$vs.notify({
+									title: "Server Error",
+									text: "Login is down temporarily, please try again after a while. We're sorry for the inconvienience.",
+									position: "top-right",
+									color: "danger"
+								});
+							} else {
+								this.emailClass = "form-control abs-input abs-red-border";
+								this.emailError = res.data.error;
+							}
+						} else if (res.data.error && res.data.error.auth) {
+							this.emailClass = "form-control abs-input abs-red-border";
+							this.emailError = res.data.error.auth;
+						} else {
+							console.log(res.data);
+							// this.$store
+							// 	.dispatch(LOGIN, res.data)
+							// 	.then(() => {
+							// 		this.loading = false;
+							// 		return this.$router.push({ name: "Dashboard" })
+							// 	});
 						}
-					}
-					
-					this.$vs.notify({
-						title: "Error",
-						text: errs,
-						position: "top-right",
-						color: "danger"
-					});
 
-					this.loading = false;
-					this.$vs.loading.close();
-				} else {
-					if (user[1].error && !user[1].error.auth) {
-						this.emailClass = "form-control abs-input abs-red-border";
-						this.emailError = user[1].error;
-					} else if (user[1].error && user[1].error.auth) {
-						this.emailClass = "form-control abs-input abs-red-border";
-						this.emailError = user[1].error.auth;
-					} else {
-						this.$store
-						.dispatch(LOGIN, user[1])
-						.then(() => {
-							this.loading = false;
-							return this.$router.push({ name: "Dashboard" })
+						this.loading = false;
+						this.$vs.loading.close();
+					})
+					.catch((err) => {
+						let errors = String(err).split(" ");
+						let errs = "";
+
+						for (let index = 0; index < errors.length; index++) {
+							const error = errors[index];
+							if (index > 0) {
+								errs = `${errs} ${error} `;
+							}
+						}
+						
+						this.$vs.notify({
+							title: "Error",
+							text: errs,
+							position: "top-right",
+							color: "danger"
 						});
-					}
 
-					this.loading = false;
-					this.$vs.loading.close();
-				}
+						this.loading = false;
+						this.$vs.loading.close();
+					});
 			}
 		},
 		validate: function() {

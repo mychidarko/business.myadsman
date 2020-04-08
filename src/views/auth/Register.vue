@@ -1,16 +1,15 @@
 <template>
 	<div class="abs-center-center auth-page">
-		<vs-card class="auth-card" style="margin-top: 2.5% !important;">
+		<vs-card class="auth-card" style="margin-top: 2.5% !important; min-width: 300px;">
 			<h3 class="abs-fw-normal">Register Your Business</h3>
 			<form class="text-left" v-on:submit.prevent="register">
 				<div class="form-row" style="margin-left: 0px;">
-					<div class="form-group" style="width: 48% !important;">
+					<div class="form-group col-md-6 col-sm-6 col-12">
 						<label for="businessName">Business Name</label>
 						<input type="text" id="businessName" :class="businessNameClass" placeholder="Adsman LLC" v-model="businessName">
 						<div class="abs-input-error form-error">{{ businessNameError }}</div>
 					</div>
-					<div style="width: 11px !important;"></div>
-					<div class="form-group" style="width: 48% !important;">
+					<div class="form-group col-md-6 col-sm-6 col-12">
 						<label for="businessTag">Business Tag</label>
 						<input type="text" id="businessTag" :class="businessTagClass" placeholder="adsman-llc" v-model="businessTag">
 						<div class="abs-input-error form-error">{{ businessTagError }}</div>
@@ -47,8 +46,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { API_URL } from '@/common/config';
 import { REGISTER } from "@/store/actions.type";
-import auth from "@/common/api/auth.api";
 
 export default {
 	name: "Register",
@@ -79,69 +79,90 @@ export default {
 		register: function() {
 			let email = this.email;
 			let position = this.position;
-			let company = this.businessName;
-			let companyTag = this.businessTag;
+			let business = this.businessName;
+			let business_tag = this.businessTag;
 			let password = this.password;
 
 			if (this.validate()) {
 				this.loading = true;
 				this.$vs.loading({ text: "Creating your account..." });
 
-				let user = auth.$register(company, companyTag, email, position, password);
-
-				if (user[0] == true) {
-					if (user[1].error && user[1].error.business_name) {
-						this.businessNameClass = "form-control abs-input abs-red-border";
-						this.businessNameError = user[1].error.businessName;
-					}
-
-					if (user[1].error && user[1].error.business_tag) {
-						this.businessTagClass = "form-control abs-input abs-red-border";
-						this.businessTagError = user[1].error.businessTag;
-					}
-
-					if (user[1].error && user[1].error.position) {
-						this.positionClass = "form-control abs-input abs-red-border";
-						this.positionError = user[1].error.position;
-					}
-
-					if (user[1].error && user[1].error.email) {
-						this.emailClass = "form-control abs-input abs-red-border";
-						this.emailError = user[1].error.email;
-					}
-					
-					if (!user[1].error) {
-						this.$store
-							.dispatch(REGISTER, user[1])
-							.then(() => {
-								this.loading = false;
-								return this.$router.push({ name: "Dashboard" })
+				axios({
+					method: "post",
+					url: `${API_URL}/business/auth/register`,
+					headers: { "Content-Type": "application/json" },
+					data: JSON.stringify({
+						business, business_tag, email, position, password
+					})
+				})
+					.then((res) => {
+						if (res.data.code && res.data.code == 404) {
+							this.$vs.notify({
+								title: "Server Error",
+								text: "Login is down temporarily, please try again after a while. We're sorry for the inconvienience.",
+								position: "top-right",
+								color: "danger"
 							});
-					}
-
-					this.loading = false;
-					this.$vs.loading.close();
-				} else {
-					let errors = String(user[1]).split(" ");
-					let errs = "";
-
-					for (let index = 0; index < errors.length; index++) {
-						const error = errors[index];
-						if (index > 0) {
-							errs = `${errs} ${error} `;
 						}
-					}
-					
-					this.$vs.notify({
-						title: "Error",
-						text: errs,
-						position: "top-right",
-						color: "danger"
-					});
 
-					this.loading = false;
-					this.$vs.loading.close();
-				}
+						if (res.data.error && res.data.error.auth) {
+							this.passwordClass = "form-control abs-input abs-red-border";
+							this.passwordError = res.data.error.auth;
+						}
+
+						if (res.data.error && res.data.error.name) {
+							this.businessNameClass = "form-control abs-input abs-red-border";
+							this.businessNameError = res.data.error.name;
+						}
+
+						if (res.data.error && res.data.error.business_tag) {
+							this.businessTagClass = "form-control abs-input abs-red-border";
+							this.businessTagError = res.data.error.business_tag;
+						}
+
+						if (res.data.error && res.data.error.employee_position) {
+							this.positionClass = "form-control abs-input abs-red-border";
+							this.positionError = res.data.error.employee_position;
+						}
+
+						if (res.data.error && res.data.error.employee_email) {
+							this.emailClass = "form-control abs-input abs-red-border";
+							this.emailError = res.data.error.employee_email;
+						}
+						
+						if (!res.data.error) {
+							this.$store
+								.dispatch(REGISTER, res.data)
+								.then(() => {
+									this.loading = false;
+									return this.$router.push({ name: "Dashboard" })
+								});
+						}
+
+						this.loading = false;
+						this.$vs.loading.close();
+					})
+					.catch((err) => {
+						let errors = String(err).split(" ");
+						let errs = "";
+
+						for (let index = 0; index < errors.length; index++) {
+							const error = errors[index];
+							if (index > 0) {
+								errs = `${errs} ${error} `;
+							}
+						}
+						
+						this.$vs.notify({
+							title: "Error",
+							text: errs,
+							position: "top-right",
+							color: "danger"
+						});
+
+						this.loading = false;
+						this.$vs.loading.close();
+					});
 			}
 		},
 		validate: function() {
