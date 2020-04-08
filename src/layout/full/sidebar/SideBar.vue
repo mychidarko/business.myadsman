@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import User from "@/common/storage.user";
+import Business from "@/common/storage.user";
 
 export default {
 	name: "SideBar",
@@ -47,9 +47,9 @@ export default {
 	data: () => ({
 		doNotClose: false,
 		windowWidth: window.innerWidth,
-		company: User.get("company"),
-		email: User.get("email"),
-		position: User.get("position")
+		company: Business.get("name"),
+		email: Business.get("employee_email"),
+		position: Business.get("employee_position")
 	}),
 	computed: {
 		//This is for mobile trigger

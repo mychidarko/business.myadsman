@@ -130,6 +130,7 @@ export default {
 			this.$store.commit('IS_SIDEBAR_ACTIVE', true);
 		},
 		handleLogout: function() {
+			this.$vs.loading({ text: "Logging you out..." });
 			this.$store
 				.dispatch(LOGOUT)
 				.then(() => this.$router.push({ name: "Login" }))

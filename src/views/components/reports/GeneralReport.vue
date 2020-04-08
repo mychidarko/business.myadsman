@@ -43,15 +43,13 @@
 </template>
 
 <script>
-import User from "@/common/storage.user";
-
 export default {
     name: "GeneralReport",
     data() {
         return {
             topAds: [
                 {
-                    id: `${(User.get("company")).toLowerCase()}-1`,
+                    id: 1,
                     name: "Click for CASH",
                     product: "Adsman users",
                     productLink: "https://app.myadsman.com",
@@ -63,7 +61,7 @@ export default {
                     timeout: "17:00"
                 },
                 {
-                    id: `${(User.get("company")).toLowerCase()}-2`,
+                    id: 2,
                     name: "Smart Surveys",
                     product: "Adsman business tools",
                     productLink: "https://myadsman.com/business",

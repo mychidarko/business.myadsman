@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import User from "@/common/storage.user";
+import Business from "@/common/storage.user";
 
 export default {
 	name: "CreateAd",
@@ -93,7 +93,7 @@ export default {
 				image: ""
 			},
 			advertiser: {
-				name: User.get("company")
+				name: Business.get("name")
 			}
 		}
 	},
