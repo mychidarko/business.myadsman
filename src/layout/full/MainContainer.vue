@@ -22,7 +22,7 @@ export default {
 	data: () => ({
 		topbarColor: "#2e9efe",
 		logotitle: "Adsman for Business",
-		sidebarLinks: sidebarLinks,
+		sidebarLinks
 	})
 }  	
 </script>
