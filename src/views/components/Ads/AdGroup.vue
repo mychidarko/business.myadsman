@@ -6,9 +6,9 @@
 			</vs-col>
 		</vs-row>
 		<vs-row v-else>
-			<div v-if="ads.length === 0" style="margin: 20px 0px !important;">
+			<vs-col v-if="ads.length === 0" style="margin: 20px 0px !important;" vs-sm="12" vs-lg="12" vs-md="12">
 				There are currently no ads at the moment
-			</div>
+			</vs-col>
 			<vs-col v-else vs-lg="3" vs-sm="6" vs-xs="12" code-toggler v-for="(ad, index) in ads" :key="index">
 				<router-link style="color: black !important;" :to="`/ads/manage/${ad.type}/${ad.id}`">
 					<vs-card class="cardx">
@@ -24,6 +24,10 @@
 						<br>
 						Earn <span class="text-primary">GH¢ {{ ad.reward }}</span> per {{ ad.type === "clickable" ? "Click" : "View" }} <br>
 						By <b>{{ ad.advertiser }}</b>
+						<br>
+						<br>
+						<router-link :to="`/ads/edit/${ad.type}/${ad.id}`" class="btn btn-primary btn-block abs-btn">Edit Ad</router-link>
+						<router-link v-if="ad.status == 'approved'" :to="`/ads/manage/${ad.type}/${ad.id}`" class="btn btn-info btn-block abs-btn">Manage Ad</router-link>
 					</vs-card>
 				</router-link>
 			</vs-col>
