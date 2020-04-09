@@ -9,14 +9,14 @@
 			</vs-alert>
 			<div v-if="earnAlertActive"><br></div>
 		</div> -->
-		<Stats />
+		<Stats :ads="stats.ads.count" :reach="stats.reach.count" :interactions="stats.interactions.count" :loading="loading" />
 		<vs-row vs-justify="center">
 			<vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="8" vs-sm="12" vs-xs="12" code-toggler>
 				<vs-card class="cardx">
 					<div slot="header">
 						<h4>General Ad Analytics</h4>
 					</div>
-					<TotalAnalyticsOverTime :data="analytics.time" v-if="!loading" />
+					<TotalAnalyticsOverTime :data="analytics.general" v-if="!loading" />
 					<div v-else>Loading Analytics Data...</div>
 				</vs-card>
 			</vs-col>
@@ -43,6 +43,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { API_URL } from '@/common/config';
+import Business from '@/common/storage.user';
+
 import TotalAnalyticsOverTime from './components/Analytics/TotalAnalyticsOverTime.vue';
 import AdsPerformaceToday from './components/Analytics/AdsPerformaceToday.vue';
 import TopAds from './components/reports/TopAds.vue';
@@ -54,85 +58,62 @@ export default {
 	data() {
 		return {
 			loading: true,
-			analytics: {}
+			analytics: {
+				today: [],
+				general: []
+			},
+			stats: {
+				ads: { ads: [], count: 0 },
+				reach: { reach: [], count: 0 },
+				interactions: { interactions: [], count: 0 },
+				// growth: { reach: [], count: 0 }
+			}
 		}
 	},
 	mounted() {
-		this.$vs.loading({ text: "Loading User Info..." });
+		this.$vs.loading({ text: "Loading Business Info..." });
 
-		setTimeout(() => {
-			let analytics = {
-				today: [
-					{
-						ad: "Ad #5",
-						impressions: 52, 
-						reach: 35, 
-						interactions: 22 
-					},
-					{
-						ad: "Ad #6",
-						impressions: 44, 
-						reach: 38,
-						interactions: 32 
-					},
-					{
-						ad: "Ad #7",
-						impressions: 51, 
-						reach: 48, 
-						interactions: 40 
-					}
-				],
-				time: [
-					{
-						ad: "Ad #1",
-						impressions: 720,
-						reach: 590,
-						interactions: 555
-					},
-					{
-						ad: "Ad #2",
-						impressions: 720, 
-						reach: 563, 
-						interactions: 528 
-					},
-					{
-						ad: "Ad #3",
-						impressions: 610, 
-						reach: 582,
-						interactions: 558 
-					},
-					{
-						ad: "Ad #4",
-						impressions: 120,
-						reach: 115,
-						interactions: 100
-					},
-					{
-						ad: "Ad #5",
-						impressions: 100, 
-						reach: 100, 
-						interactions: 100 
-					},
-					{
-						ad: "Ad #6",
-						impressions: 50, 
-						reach: 50,
-						interactions: 50 
-					},
-					{
-						ad: "Ad #7",
-						impressions: 100, 
-						reach: 100, 
-						interactions: 100 
-					}
-				]
-			};
-			
-			this.analytics = analytics;
-			this.loading = false;
+		axios.get(`${API_URL}/ads/business/${Business.get("id")}`)
+			.then((res) => {
+				this.stats.ads.count = res.data.length;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 
-			this.$vs.loading.close();
-		}, 3000);
+		axios.get(`${API_URL}/ads/business/reach/${Business.get("id")}/all`)
+			.then((res) => {
+				this.stats.reach = res.data;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		axios.get(`${API_URL}/ads/business/interactions/${Business.get("id")}/all`)
+			.then((res) => {
+				this.stats.interactions = res.data;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		axios.get(`${API_URL}/business/2/ads/analytics/general/today`)
+			.then((res) => {
+				this.analytics.today = res.data;
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		axios.get(`${API_URL}/business/2/ads/analytics/general`)
+			.then((res) => {
+				this.analytics.general = res.data;
+				this.loading = false;
+				this.$vs.loading.close();
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	},
 	components: {
 		TotalAnalyticsOverTime,

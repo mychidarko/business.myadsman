@@ -1,9 +1,36 @@
 <template>
     <vs-row>
-        <vs-col vs-lg="3" vs-xs="12"  v-for="(data, index) in dataList" :key="index">
+        <vs-col vs-lg="4" vs-sm="4" vs-xs="12">
             <vs-card>
-                <h4 class="mb-1">{{ data.label }}</h4>
-                <span>{{ data.title }}</span>
+                <h4 class="mb-1">{{ loading ? "Loading..." : ads }}</h4>
+                <span>{{ loading ? "Loading..." : "Total Ads" }}</span>
+                <br>
+                <br>
+                <router-link to="/ads/manage/all">View ads</router-link>
+            </vs-card>
+        </vs-col>
+        <vs-col vs-lg="4" vs-sm="4" vs-xs="12">
+            <vs-card>
+                <h4 class="mb-1">{{ loading ? "Loading..." : reach }}</h4>
+                <span>{{ loading ? "Loading..." : "Total Ad Reach" }}</span>
+                <br>
+                <br>
+                <router-link to="/ads/manage/insights/reach">Learn more</router-link>
+            </vs-card>
+        </vs-col>
+        <vs-col vs-lg="4" vs-sm="4" vs-xs="12">
+            <vs-card>
+                <h4 class="mb-1">{{ loading ? "Loading..." : interactions }}</h4>
+                <span>{{ loading ? "Loading..." : "Total Ad Interactions" }}</span>
+                <br>
+                <br>
+                <router-link to="/ads/manage/insights/interactions">Learn more</router-link>
+            </vs-card>
+        </vs-col>
+        <!-- <vs-col vs-lg="3" vs-sm="6" vs-xs="12">
+            <vs-card>
+                <h4 class="mb-1">{{ loading ? "Loading..." : data.label }}</h4>
+                <span>{{ loading ? "Loading..." : "Ad Growth" }}</span>
                 <div v-if="data.percentage">
                     <div v-if="data.percentage < 30">
                         <vs-progress :percent="data.percentage" color="danger">primary</vs-progress>
@@ -19,48 +46,15 @@
                     <br>
                 </div>
                 <br>
-                <router-link :to="`${data.moreUrl}`">{{ data.moreText }}</router-link>
+                <router-link to="/ads/manage/insights/growth">Learn more</router-link>
             </vs-card>
-        </vs-col>
+        </vs-col> -->
     </vs-row>
 </template>
 
 <script>
 export default {
     name: "Stats",
-    data() {
-        return {
-            dataList: [
-                {
-                    label: 122,
-                    title: "Total Ads",
-                    percentage: null,
-                    moreUrl: "/ads/manage/all",
-                    moreText: "View ads"
-                },
-                {
-                    label: "622,326",
-                    title: "Total Ad Reach",
-                    percentage: null,
-                    moreUrl: "/ads/manage/insights/reach",
-                    moreText: "Learn more"
-                },
-                {
-                    label: "123,552",
-                    title: "Total Ad Interactions",
-                    percentage: null,
-                    moreUrl: "/ads/manage/insights/interactions",
-                    moreText: "Learn more"
-                },
-                {
-                    label: "30%",
-                    title: "Ad Growth",
-                    percentage: 30,
-                    moreUrl: "/ads/manage/insights/growth",
-                    moreText: "Learn more"
-                }
-            ]
-        }
-    },
+    props: ["loading", "ads", "interactions", "reach"]
 }
 </script>
