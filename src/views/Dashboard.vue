@@ -78,7 +78,25 @@ export default {
 				this.stats.ads.count = res.data.length;
 			})
 			.catch((err) => {
-				console.log(err);
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/ads/business/reach/${Business.get("id")}/all`)
@@ -86,7 +104,25 @@ export default {
 				this.stats.reach = res.data;
 			})
 			.catch((err) => {
-				console.log(err);
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/ads/business/interactions/${Business.get("id")}/all`)
@@ -94,25 +130,79 @@ export default {
 				this.stats.interactions = res.data;
 			})
 			.catch((err) => {
-				console.log(err);
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
 			});
 
-		axios.get(`${API_URL}/business/2/ads/analytics/general/today`)
+		axios.get(`${API_URL}/business/${Business.get("id")}/ads/analytics/general/today`)
 			.then((res) => {
 				this.analytics.today = res.data;
 			})
 			.catch((err) => {
-				console.log(err);
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
 			});
 
-		axios.get(`${API_URL}/business/2/ads/analytics/general`)
+		axios.get(`${API_URL}/business/${Business.get("id")}/ads/analytics/general`)
 			.then((res) => {
 				this.analytics.general = res.data;
 				this.loading = false;
 				this.$vs.loading.close();
 			})
 			.catch((err) => {
-				console.log(err);
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
 			});
 	},
 	components: {

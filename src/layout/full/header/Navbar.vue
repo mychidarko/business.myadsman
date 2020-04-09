@@ -72,8 +72,8 @@
 				<a class="text-white-dark nav-text user-image" href="#"><img src="@/assets/images/users/me.jpg" alt="User"/></a>
 				<vs-dropdown-menu class="topbar-dd">          
 					<vs-dropdown-item to="/profile"><vs-icon icon="person_outline" class="mr-1"></vs-icon> My Profile</vs-dropdown-item>
-					<vs-dropdown-item><vs-icon icon="sentiment_very_satisfied" class="mr-1"></vs-icon> My Balance</vs-dropdown-item>
-					<vs-dropdown-item><vs-icon icon="mail_outline" class="mr-1"></vs-icon> Inbox</vs-dropdown-item>
+					<!-- <vs-dropdown-item><vs-icon icon="sentiment_very_satisfied" class="mr-1"></vs-icon> My Balance</vs-dropdown-item> -->
+					<!-- <vs-dropdown-item><vs-icon icon="mail_outline" class="mr-1"></vs-icon> Inbox</vs-dropdown-item> -->
 					<hr class="mb-1" />
 					<vs-dropdown-item to="/settings"><vs-icon icon="settings" class="mr-1"></vs-icon> Account Setting</vs-dropdown-item>
 					<hr class="mb-1" />
@@ -85,6 +85,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import User from "@/common/storage.user";
+import { API_URL } from "@/common/config";
 import { LOGOUT } from "@/store/actions.type";
 
 export default {
@@ -108,14 +111,41 @@ export default {
 		reports: []
 	}),
 	mounted: function() {
-		this.notifications = [
-			{
-				read: false,
-				title: "Welcome to Adsman Business",
-				body: "Grow your business and spread your reach.",
-				url: "/ads/create"
-			}
-		];
+		axios({ url: `${API_URL}/notifications/business/unread`, method: "get", headers: { "Authorization": `Bearer ${User.get("token")}` } })
+			.then((res) => {
+				if (res.data.error && res.data.error == "Expired token") {
+					axios.get(`${API_URL}/business/${User.get("id")}/token/refresh`)
+						.then((res) => {
+							let user = User.get();
+							user.token = res.data.token;
+							User.save(user);
+
+							axios({ url: `${API_URL}/notifications/business/unread`, method: "get", headers: { "Authorization": `Bearer ${User.get("token")}` } })
+			.					then((res) => this.notifications = res.data)
+						});
+				} else {
+					this.notifications = res.data;
+				}
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+			});
+
 		this.reports = [
 			{
 				read: false,
