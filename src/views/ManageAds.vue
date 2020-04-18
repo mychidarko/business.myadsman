@@ -5,28 +5,28 @@
 				<h4>Pending Ads</h4>
 				<span>Awaiting confirmation from Adsman</span>
 			</div>
-			<AdGroup :loading="loading" :ads="pending" />
+			<AdGroup :loading="loading" :ads="pending" :reloadAds="loadAds" />
 		</section>
 		<section v-if="drafts.length > 0">
 			<div class="section-info">
 				<h4>Drafts</h4>
 				<span>These ads haven't been submitted to Adsman</span>
 			</div>
-			<AdGroup :loading="loading" :ads="drafts" />
+			<AdGroup :loading="loading" :ads="drafts" :reloadAds="loadAds" />
 		</section>
 		<section>
 			<div class="section-info">
 				<h4>Clickable Ads</h4>
 				<span>Clickable ads approved by adsman</span>
 			</div>
-			<AdGroup :loading="loading" :ads="clickableAds" />
+			<AdGroup :loading="loading" :ads="clickableAds" :reloadAds="loadAds" />
 		</section>
 		<section class="final-section">
 			<div class="section-info">
 				<h4>Video Ads</h4>
 				<span>Video ads approved by adsman</span>
 			</div>
-			<AdGroup :loading="loading" :ads="videoAds" />
+			<AdGroup :loading="loading" :ads="videoAds" :reloadAds="loadAds" />
 		</section>
 	</div>
 </template>
@@ -51,103 +51,7 @@ export default {
 	mounted: function() {
 		this.$vs.loading({ text: "Loading Ads..." });
 
-		axios.get(`${API_URL}/ads/business/${Business.get("id")}/drafts`)
-			.then((res) => {
-				this.drafts = res.data;
-			})
-			.catch((err) => {
-				let errors = String(err).split(" ");
-				let errs = "";
-
-				for (let index = 0; index < errors.length; index++) {
-					const error = errors[index];
-					if (index > 0) {
-						errs = `${errs} ${error} `;
-					}
-				}
-				
-				this.$vs.notify({
-					title: "Error",
-					text: errs,
-					position: "top-right",
-					color: "danger"
-				});
-			});
-		
-		axios.get(`${API_URL}/ads/business/${Business.get("id")}/pending`)
-			.then((res) => {
-				this.pending = res.data;
-			})
-			.catch((err) => {
-				let errors = String(err).split(" ");
-				let errs = "";
-
-				for (let index = 0; index < errors.length; index++) {
-					const error = errors[index];
-					if (index > 0) {
-						errs = `${errs} ${error} `;
-					}
-				}
-				
-				this.$vs.notify({
-					title: "Error",
-					text: errs,
-					position: "top-right",
-					color: "danger"
-				});
-			});
-
-		axios.get(`${API_URL}/ads/business/${Business.get("id")}/clickable`)
-			.then((res) => {
-				this.clickableAds = res.data;
-			})
-			.catch((err) => {
-				let errors = String(err).split(" ");
-				let errs = "";
-
-				for (let index = 0; index < errors.length; index++) {
-					const error = errors[index];
-					if (index > 0) {
-						errs = `${errs} ${error} `;
-					}
-				}
-				
-				this.$vs.notify({
-					title: "Error",
-					text: errs,
-					position: "top-right",
-					color: "danger"
-				});
-			});
-
-		axios.get(`${API_URL}/ads/business/${Business.get("id")}/video`)
-			.then((res) => {
-				this.videoAds = res.data;
-
-				this.loading = false;
-				this.$vs.loading.close();
-			})
-			.catch((err) => {
-				let errors = String(err).split(" ");
-				let errs = "";
-
-				for (let index = 0; index < errors.length; index++) {
-					const error = errors[index];
-					if (index > 0) {
-						errs = `${errs} ${error} `;
-					}
-				}
-				
-				this.$vs.notify({
-					title: "Error",
-					text: errs,
-					position: "top-right",
-					color: "danger"
-				});
-
-				this.loading = false;
-				this.$vs.loading.close();
-			});
+		this.loadAds();
 		
 		// setTimeout(() => {
 		// 	let drafts = [
@@ -180,6 +84,107 @@ export default {
 		// 	this.loading = false;
 		// 	this.$vs.loading.close();
 		// }, 3000);
+	},
+	methods: {
+		loadAds: function() {
+			axios.get(`${API_URL}/ads/business/${Business.get("id")}/drafts`)
+				.then((res) => {
+					this.drafts = res.data;
+				})
+				.catch((err) => {
+					let errors = String(err).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+				});
+			
+			axios.get(`${API_URL}/ads/business/${Business.get("id")}/pending`)
+				.then((res) => {
+					this.pending = res.data;
+				})
+				.catch((err) => {
+					let errors = String(err).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+				});
+
+			axios.get(`${API_URL}/ads/business/${Business.get("id")}/clickable`)
+				.then((res) => {
+					this.clickableAds = res.data;
+				})
+				.catch((err) => {
+					let errors = String(err).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+				});
+
+			axios.get(`${API_URL}/ads/business/${Business.get("id")}/video`)
+				.then((res) => {
+					this.videoAds = res.data;
+
+					this.loading = false;
+					this.$vs.loading.close();
+				})
+				.catch((err) => {
+					let errors = String(err).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+
+					this.loading = false;
+					this.$vs.loading.close();
+				});
+		}
 	},
 	components: { AdGroup }
 }

@@ -83,9 +83,6 @@ export default {
 					position: "top-right",
 					color: "danger"
 				});
-
-				this.loading = false;
-				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/ads/business/reach/${Business.get("id")}/all`)
@@ -109,9 +106,6 @@ export default {
 					position: "top-right",
 					color: "danger"
 				});
-
-				this.loading = false;
-				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/ads/business/interactions/${Business.get("id")}/all`)
@@ -135,9 +129,6 @@ export default {
 					position: "top-right",
 					color: "danger"
 				});
-
-				this.loading = false;
-				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/business/${Business.get("id")}/ads/analytics/general/today`)
@@ -161,9 +152,6 @@ export default {
 					position: "top-right",
 					color: "danger"
 				});
-
-				this.loading = false;
-				this.$vs.loading.close();
 			});
 
 		axios.get(`${API_URL}/business/${Business.get("id")}/ads/analytics/general`)
