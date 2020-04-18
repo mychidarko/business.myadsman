@@ -29,16 +29,7 @@
 					<div v-else>Loading Analytics Data...</div>
 				</vs-card>
 			</vs-col>
-			<vs-col vs-lg="12">
-				<vs-card>
-					<div slot="header">
-						<h4>Your Top Ads</h4>
-					</div>
-					<TopAds />
-				</vs-card>
-			</vs-col>
 		</vs-row>
-		<!-- <Blogs/> -->
 	</div>  
 </template>
 
@@ -47,11 +38,9 @@ import axios from 'axios';
 import { API_URL } from '@/common/config';
 import Business from '@/common/storage.user';
 
-import TotalAnalyticsOverTime from './components/Analytics/TotalAnalyticsOverTime.vue';
-import AdsPerformaceToday from './components/Analytics/AdsPerformaceToday.vue';
-import TopAds from './components/reports/TopAds.vue';
-import Stats from './components/dashboard/Stats.vue';
-// import Blogs from './components/dashboard/Blogs.vue';
+import TotalAnalyticsOverTime from './components/Analytics/TotalAnalyticsOverTime';
+import AdsPerformaceToday from './components/Analytics/AdsPerformaceToday';
+import Stats from './components/dashboard/Stats';
 
 export default {
 	name: 'Dashboard',
@@ -208,9 +197,7 @@ export default {
 	components: {
 		TotalAnalyticsOverTime,
 		AdsPerformaceToday,
-		TopAds,
-		Stats,
-		// Blogs
+		Stats
 	},
 }
 </script>

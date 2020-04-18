@@ -44,42 +44,96 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { API_URL } from '@/common/config';
+import Business from '@/common/storage.user';
+
 export default {
     name: "TopAds",
     data: function() {
         return {
+            ads: [],
             topAds: [],
             loading: true
         }
     },
     mounted: function() {
-        setTimeout(() => {
-            this.topAds = [
-                {
-                    id: 1,
-                    name: "Click for CASH",
-                    product: "Adsman users",
-                    productLink: "https://app.myadsman.com",
-                    support: "support.c4c@myadsman.com",
-                    reach: 856,
-                    clicks: 829,
-                    type: "clickable",
-                    timeout: "17:00"
-                },
-                {
-                    id: 2,
-                    name: "Smart Surveys",
-                    product: "Adsman business tools",
-                    productLink: "https://myadsman.com/business",
-                    support: "support.business@myadsman.com",
-                    reach: 466,
-                    clicks: 460,
-                    type: "video",
-                    timeout: "23:00"
-                }
-            ];
-            this.loading = false;
-        }, 3000);
+        axios.get(`${API_URL}/ads/business/${Business.get("id")}/limit/10`)
+			.then((res) => {
+				this.ads = res.data;
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+            });
+        
+        axios.get(`${API_URL}/ads/business/${Business.get("id")}/limit/10`)
+			.then((res) => {
+				this.ads = res.data;
+				this.loading = false;
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+            });
+        
+        // setTimeout(() => {
+        //     this.topAds = [
+        //         {
+        //             id: 1,
+        //             name: "Click for CASH",
+        //             product: "Adsman users",
+        //             productLink: "https://app.myadsman.com",
+        //             support: "support.c4c@myadsman.com",
+        //             reach: 856,
+        //             clicks: 829,
+        //             type: "clickable",
+        //             timeout: "17:00"
+        //         },
+        //         {
+        //             id: 2,
+        //             name: "Smart Surveys",
+        //             product: "Adsman business tools",
+        //             productLink: "https://myadsman.com/business",
+        //             support: "support.business@myadsman.com",
+        //             reach: 466,
+        //             clicks: 460,
+        //             type: "video",
+        //             timeout: "23:00"
+        //         }
+        //     ];
+        //     this.loading = false;
+        // }, 3000);
     }
 }
 </script>

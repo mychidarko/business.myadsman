@@ -1,31 +1,26 @@
 <template>
-	<div>
+	<div style="margin-top: -15px;">
 		<vs-row vs-justify="center">
 			<vs-col type="flex" vs-justify="center" flex-direction="column" vs-align="center" vs-xs="12" vs-sm="8" vs-md="8" vs-lg="8" style="padding: 0px 4px 0px 0px !important;">
 				<vs-card class="cardx">
 					<div class="ad-image-container">
 						<div v-if="loading">Loading ad...</div>
-						<video controls v-else src="@/assets/images/test/1.mp4"></video>
+						<video controls v-else :src="ad.media"></video>
 					</div>
 
-					<div class="footer" v-if="!loading">
-						{{ ad.name }}
-						<!-- <button class="btn btn-danger abs-btn pull-right">
-							<vs-icon icon="delete"></vs-icon> Remove Ad
-						</button> -->
-						<router-link :to="`/ads/edit/video/${ad.id}`" class="btn btn-primary abs-btn pull-right">
-							<vs-icon icon="edit"></vs-icon> Edit Ad
-						</router-link>
-					</div>
+					<div class="footer" v-if="!loading">{{ ad.name }}</div>
 				</vs-card>
 				<vs-card class="cardx">
 					<div class="comments-and-info-container">
-						<div v-if="loading">Loading advertiser info...</div>
+						<div v-if="loading">Loading ad data...</div>
 						<div v-else>
-							<h3>Advertiser Information</h3>
-							<p>Ad by <b>{{ advertiser.name }}</b></p>
-							<h5>Advertiser Description</h5>
-							<p>{{ advertiser.description }}</p>
+							<h4>Ad Operations</h4>
+							<router-link :to="`/ads/edit/video/${ad.id}`" class="btn btn-primary abs-btn btn-block">
+								<vs-icon icon="edit"></vs-icon> Edit Ad
+							</router-link>
+							<button class="btn btn-danger abs-btn btn-block">
+								<vs-icon icon="delete"></vs-icon> Remove Ad
+							</button>
 						</div>
 					</div>
 				</vs-card>
@@ -41,14 +36,19 @@
 							<h4>Reward</h4>
 							<p>GH¢ {{ ad.reward }}</p>
 
-							<h4>Ad Link To</h4>
-							<p><a :href="`${ad.link}?ref=adsman`" target="_blank">{{ ad.link }}</a></p>
+							<div v-if="ad.link.length > 0">
+								<h4>Ad Link To</h4>
+								<p><a :href="`${ad.link}?ref=adsman`" target="_blank">{{ ad.link }}</a></p>
+							</div>
 						</div>
-						<vs-divider></vs-divider>
+						<br>
+						<br>
 						<section>
 							<div v-if="loading">Loading Ad Analytics...</div>
 							<div v-else>
 								<div>
+									<h4>Analytics Peek</h4>
+									<br>
 									<div class="abs-row">
 										<vs-col col-lg="6" col-xs="6">
 											<h5>Total impressions</h5>
@@ -66,17 +66,11 @@
 											<h5>Total Interactions</h5>
 											<b>{{ analytics.interactions }}</b>
 										</vs-col>
-										<vs-divider></vs-divider>
-										<vs-col col-lg="6" col-xs="6">
-											<h5>Total Amount Spent GH¢</h5>
-											{{ analytics.spent }}
-										</vs-col>
 									</div>
-									
-									<router-link :to="`/analytics/ad/video/${ad.id}`" class="btn btn-dark btn-block btn-outline abs-btn" style="margin-top: 20px !important;">
-										<vs-icon icon="bar_chart"></vs-icon> View Complete Analytics Data
-									</router-link>
 								</div>
+								<router-link :to="`/analytics/ad/video/${ad.id}`" class="btn btn-dark btn-block abs-btn" style="margin-top: 76px !important;">
+									<vs-icon>bar_chart</vs-icon> View Complete Analytics Data
+								</router-link>
 							</div>
 						</section>
 					</div>
@@ -87,76 +81,90 @@
 </template>
 
 <script>
+import axios from "axios";
+import { API_URL } from "@/common/config";
+
 export default {
 	name: "ManageVideoAd",
 	data: function() {
 		return {
 			ad: {},
-			advertiser: {},
 			analytics: {},
 			loading: true
 		}
 	},
 	mounted: function() {
-		// api call to get the ad and advertiser information
-		this.$vs.loading({ text: "Loading Ad Information" });
+		this.$vs.loading({ text: "Loading Ad Information..." });
 
 		let id = this.$route.params.id;
 
-		setTimeout(() => {
-			let ad = {
-				id,
-				name: "The future of payments",
-				advertiser: "Portal Network",
-				description: "Link all your wallets together with Portal Online, send and receive cash, pay your bills and keep track of your cash.",
-				link: "https://example.com",
-				reward: 0.2
-			};
-			let advertiser = {
-				name: "Portal Network",
-				description: "A finacial organisation that deals maiinly crypto currency and using blockchain related to improve transactions"
-			};
-			let analytics = {
-				impressions: 2410,
-				reach: 2100,
-				interactions: 1991,
-				spent: 378.5,
-				locations: [
-					{ 
-						name: "Ghana", 
-						impressions: 2210, 
-						reach: 1940, 
-						interactions: 1845 
-					},
-					{ 
-						name: "Togo", 
-						impressions: 10, 
-						reach: 8, 
-						interactions: 8
-					},
-					{ 
-						name: "Unknown", 
-						impressions: 190, 
-						reach: 152, 
-						interactions: 138 
-					},
-				]
-			};
+		axios.get(`${API_URL}/ads/single/${id}`)
+			.then((res) => {
+				if (!res.data.error) {
+					if (res.data.status != "approved") {
+						this.loading = false;
+						this.$vs.loading.close();
+						this.$router.push("/ads/manage");
+					}
 
-			this.ad = ad;
-			this.advertiser = advertiser;
-			this.analytics = analytics;
+					if (res.data.type == "clickable") {
+						this.loading = false;
+						this.$vs.loading.close();
+						this.$router.push("/ads/manage/clickable/" + id);
+					}
 
-			this.loading = false;
-			this.$vs.loading.close();
-		}, 5000);
-	},
-	methods: {
-		showViewedNotification: function(title, text, color, icon) {
-			this.$vs.notify({
-				title, text, color, position: 'top-right', icon, time: 8000
+					this.ad = res.data;
+				}
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
 			});
-		}
+
+		axios.get(`${API_URL}/business/ads/analytics/single/${id}`)
+			.then((res) => {
+				if (!res.data.error) {
+					this.analytics = res.data;
+
+					this.loading = false;
+					this.$vs.loading.close();
+				}
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
+			});
 	}
 }
 </script>
@@ -183,14 +191,12 @@ export default {
 }
 
 .abs-btn {
-	float: right !important;
 	padding: 5px 10px !important;
 	border-radius: 0px !important;
-	margin-top: -5px !important;
 }
 
 .other-ads-container {
-	height: 75vh;
+	height: 74vh;
 }
 
 .footer {

@@ -26,25 +26,21 @@
 						<div slot="header">Analytics at a glance</div>
 						<div>
 							<div col-lg="6" col-xs="6">
-								<h5>Total impressions</h5>
+								<h3>Total impressions</h3>
 								<div>Total number of times your ad has been seen</div>
-								<b>{{ analytics.impressions }}</b>
+								<h5 style="margin-top: 10px;">{{ analytics.impressions }}</h5>
 							</div>
 							<vs-divider></vs-divider>
 							<div col-lg="6" col-xs="6">
-								<h5>Total Reach</h5>
+								<h3>Total Reach</h3>
 								<div><b>Unique</b> number of times your ad has been seen</div>
-								{{ analytics.reach }}
+								<h5 style="margin-top: 10px;">{{ analytics.reach }}</h5>
 							</div>
 							<vs-divider></vs-divider>
 							<div col-lg="6" col-xs="6">
-								<h5>Total Interactions</h5>
-								<b>{{ analytics.interactions }}</b>
-							</div>
-							<vs-divider></vs-divider>
-							<div col-lg="6" col-xs="6">
-								<h5>Total Amount Spent GH¢</h5>
-								{{ analytics.spent }}
+								<h3>Total Interactions</h3>
+								<div>Total number of times users have watched or clicked on your ad</div>
+								<h5 style="margin-top: 10px;">{{ analytics.interactions }}</h5>
 							</div>
 						</div>
 					</vs-card>
@@ -52,19 +48,19 @@
 				<vs-col vs-xs="12" vs-md="12" vs-sm="12" vs-lg="12">
 					<vs-card>
 						<div slot="header">Analytics Over Time</div>
-						<AnalyticsOverTime :data="analytics.time" />
+						<AnalyticsOverTime :data="time" />
 					</vs-card>
 				</vs-col>
 				<vs-col vs-xs="12" vs-md="6" vs-sm="12" vs-lg="6">
 					<vs-card>
 						<div slot="header">Analytics By Location</div>
-						<AnalyticsByLocation :data="analytics.locations" />
+						<AnalyticsByLocation :data="locations" />
 					</vs-card>
 				</vs-col>
 				<vs-col vs-xs="12" vs-md="6" vs-sm="12" vs-lg="6">
 					<vs-card>
 						<div slot="header">Analytics Per Gender</div>
-						<AnalyticsByGender :data="analytics.gender" />
+						<AnalyticsByGender :data="gender" />
 					</vs-card>
 				</vs-col>
 			</vs-row>
@@ -73,6 +69,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { API_URL } from '@/common/config';
+
 import AnalyticsByLocation from './components/Analytics/AnalyticsByLocation';
 import AnalyticsByGender from './components/Analytics/AnalyticsByGender';
 import AnalyticsOverTime from './components/Analytics/AnalyticsOverTime';
@@ -86,127 +85,143 @@ export default {
 		return {
 			ad: {},
 			advertiser: {},
-			analytics: {},
+			analytics: {
+				interactions: 0,
+				impressions: 0,
+				reach: 0
+			},
+			time: [],
+			gender: [],
+			locations: [],
 			loading: true
 		}
 	},
 	mounted: function() {
-		let type = this.$route.params.type;
 		let id = this.$route.params.id;
 
 		this.$vs.loading({ text: "Loading Ad Analytics..." });
 
-		setTimeout(() => {
-			let ad = {
-				id, type,
-				name: "The future of payments",
-				advertiser: "Portal Network",
-				description: "Link all your wallets together with Portal Online, send and receive cash, pay your bills and keep track of your cash.",
-				link: "https://example.com",
-				reward: 0.2
-			};
-			let advertiser = {
-				name: "Portal Network",
-				description: "A finacial organisation that deals maiinly crypto currency and using blockchain related to improve transactions"
-			};
-			let analytics = {
-				impressions: 2410,
-				reach: 2100,
-				interactions: 1991,
-				spent: 378.5,
-				locations: [
-					{ 
-						name: "Ghana", 
-						impressions: 2210, 
-						reach: 1940, 
-						interactions: 1845 
-					},
-					{ 
-						name: "Togo", 
-						impressions: 10, 
-						reach: 8, 
-						interactions: 8
-					},
-					{ 
-						name: "Unknown", 
-						impressions: 190, 
-						reach: 152, 
-						interactions: 138 
-					},
-				],
-				gender: [
-					{
-						type: "Male",
-						impressions: 860, 
-						reach: 730, 
-						interactions: 695 
-					},
-					{
-						type: "Female",
-						impressions: 860, 
-						reach: 708, 
-						interactions: 658 
-					},
-					{
-						type: "Unknown",
-						impressions: 690, 
-						reach: 662,
-						interactions: 638 
-					}
-				],
-				time: [
-					{
-						date: "13th March, 2020",
-						impressions: 720,
-						reach: 590,
-						interactions: 555
-					},
-					{
-						date: "14th March, 2020",
-						impressions: 720, 
-						reach: 563, 
-						interactions: 528 
-					},
-					{
-						date: "15th March, 2020",
-						impressions: 610, 
-						reach: 582,
-						interactions: 558 
-					},
-					{
-						date: "16th March, 2020",
-						impressions: 120,
-						reach: 115,
-						interactions: 100
-					},
-					{
-						date: "17th March, 2020",
-						impressions: 100, 
-						reach: 100, 
-						interactions: 100 
-					},
-					{
-						date: "18th March, 2020",
-						impressions: 50, 
-						reach: 50,
-						interactions: 50 
-					},
-					{
-						date: "19th March, 2020",
-						impressions: 100, 
-						reach: 100, 
-						interactions: 100 
-					}
-				]
-			};
+		axios.get(`${API_URL}/ads/single/${id}`)
+			.then((res) => {
+				this.ad = res.data;
+				this.advertiser = { name: res.data.advertiser, description: "No Description Provided" };
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
 
-			this.ad = ad;
-			this.advertiser = advertiser;
-			this.analytics = analytics;
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+			});
 
-			this.loading = false;
-			this.$vs.loading.close();
-		}, 3000);
+		axios.get(`${API_URL}/business/ads/analytics/single/${id}`)
+			.then((res) => {
+				this.analytics = res.data;
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+			});
+		
+		axios.get(`${API_URL}/business/ads/analytics/single/${id}/overtime`)
+			.then((res) => {
+				this.time = res.data;
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+			});
+
+		axios.get(`${API_URL}/business/ads/analytics/single/${id}/location`)
+			.then((res) => {
+				this.locations = res.data;
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+			});
+
+		axios.get(`${API_URL}/business/ads/analytics/single/${id}/gender`)
+			.then(() => {
+				// this.gender = res.data;
+				this.gender = [];
+				this.loading = false;
+				this.$vs.loading.close();
+			})
+			.catch((err) => {
+				let errors = String(err).split(" ");
+				let errs = "";
+
+				for (let index = 0; index < errors.length; index++) {
+					const error = errors[index];
+					if (index > 0) {
+						errs = `${errs} ${error} `;
+					}
+				}
+				
+				this.$vs.notify({
+					title: "Error",
+					text: errs,
+					position: "top-right",
+					color: "danger"
+				});
+
+				this.loading = false;
+				this.$vs.loading.close();
+			});
 	}
 }
 </script>

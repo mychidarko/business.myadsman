@@ -181,9 +181,7 @@ export default {
 		// 	this.$vs.loading.close();
 		// }, 3000);
 	},
-	components: {
-		AdGroup
-	}
+	components: { AdGroup }
 }
 </script>
 
