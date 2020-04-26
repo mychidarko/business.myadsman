@@ -11,6 +11,10 @@
 		</div> -->
 		<Stats :ads="stats.ads.count" :reach="stats.reach.count" :interactions="stats.interactions.count" :loading="loading" />
 		<vs-row vs-justify="center">
+			<vs-col vs-lg="12" vs-sm="12" vs-xs="12">
+				<vs-alert color="danger">Ads <b>reach</b> and <b>impressions</b> are still under development.</vs-alert>
+				<br>
+			</vs-col>
 			<vs-col type="flex" vs-justify="center" vs-align="center" vs-lg="8" vs-sm="12" vs-xs="12" code-toggler>
 				<vs-card class="cardx">
 					<div slot="header">
