@@ -69,7 +69,7 @@
 			</vs-dropdown>
 			
 			<vs-dropdown  vs-trigger-click left class="cursor-pointer pr-2 pl-2 ml-1 mr-md-3">
-				<a class="text-white-dark nav-text user-image" href="#"><img src="@/assets/images/users/me.jpg" alt="User"/></a>
+				<a class="text-white-dark nav-text user-image" href="#"><img src="@/assets/images/users/me.jpg" alt="Business"/></a>
 				<vs-dropdown-menu class="topbar-dd">          
 					<vs-dropdown-item to="/profile"><vs-icon icon="person_outline" class="mr-1"></vs-icon> My Profile</vs-dropdown-item>
 					<!-- <vs-dropdown-item><vs-icon icon="sentiment_very_satisfied" class="mr-1"></vs-icon> My Balance</vs-dropdown-item> -->
@@ -86,7 +86,7 @@
 
 <script>
 import axios from "axios";
-import User from "@/common/storage.user";
+import Business from "@/common/storage.user";
 import { API_URL } from "@/common/config";
 import { LOGOUT } from "@/store/actions.type";
 
@@ -111,40 +111,7 @@ export default {
 		reports: []
 	}),
 	mounted: function() {
-		axios({ url: `${API_URL}/notifications/business/unread`, method: "get", headers: { "Authorization": `Bearer ${User.get("token")}` } })
-			.then((res) => {
-				if (res.data.error && res.data.error == "Expired token") {
-					axios.get(`${API_URL}/business/${User.get("id")}/token/refresh`)
-						.then((res) => {
-							let user = User.get();
-							user.token = res.data.token;
-							User.save(user);
-
-							axios({ url: `${API_URL}/notifications/business/unread`, method: "get", headers: { "Authorization": `Bearer ${User.get("token")}` } })
-			.					then((res) => this.notifications = res.data)
-						});
-				} else {
-					this.notifications = res.data;
-				}
-			})
-			.catch((err) => {
-				let errors = String(err).split(" ");
-				let errs = "";
-
-				for (let index = 0; index < errors.length; index++) {
-					const error = errors[index];
-					if (index > 0) {
-						errs = `${errs} ${error} `;
-					}
-				}
-				
-				this.$vs.notify({
-					title: "Error",
-					text: errs,
-					position: "top-right",
-					color: "danger"
-				});
-			});
+		this.loadNotifications();
 
 		this.reports = [
 			{
@@ -156,6 +123,44 @@ export default {
 		];
 	},
 	methods: {
+		// refreshToken: function($function = null) {
+		// 	axios.get(`${API_URL}/business/${Business.get("id")}/token/refresh`)
+		// 		.then((res) => {
+		// 			let business = Business.get();
+		// 			business.token = res.data.token;
+		// 			Business.save(business);
+					
+		// 			if ($function !== null) $function();
+		// 		});
+		// },
+		loadNotifications: function() {
+			axios({ url: `${API_URL}/notifications/business/unread`, method: "get", headers: { "Authorization": `Bearer ${Business.get("token")}` } })
+				.then((res) => {
+					if (res.data.error && res.data.error == "Expired token") {
+						Business.refreshToken(this.loadNotifications);
+					} else {
+						this.notifications = res.data;
+					}
+				})
+				.catch((err) => {
+					let errors = String(err).split(" ");
+					let errs = "";
+
+					for (let index = 0; index < errors.length; index++) {
+						const error = errors[index];
+						if (index > 0) {
+							errs = `${errs} ${error} `;
+						}
+					}
+					
+					this.$vs.notify({
+						title: "Error",
+						text: errs,
+						position: "top-right",
+						color: "danger"
+					});
+				});
+		},
 		activeSidebar() {
 			this.$store.commit('IS_SIDEBAR_ACTIVE', true);
 		},
